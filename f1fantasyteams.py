@@ -1,6 +1,8 @@
 import requests
 import json
 
+# result is posted in a file called F1FantasyTeams.txt in the same directory as this script.
+
 drivers = []
 constructors = []
 
@@ -17,7 +19,7 @@ drivers.sort(reverse=True, key=lambda tup: tup[1])
 constructors.sort(reverse=True, key=lambda tup: tup[1])
 
 num_drivers = len(drivers)
-result=[] #structure = (drivers,cost)
+result=[]
 for constructor in constructors:
     for first in range(0,(num_drivers-4)):
         for second in range(first+1,(num_drivers-3)):
@@ -29,6 +31,13 @@ for constructor in constructors:
 result.sort(reverse=True, key=lambda tup: tup[1])
 
 file = open('F1FantasyTeams.txt','w')
-for tuple in result: # tuple looks like (<list of drivers names and constructor>,cost) use filters below to remove unnecessary results.
-    if not 'Str' in tuple[0] and not 'Lat' in tuple[0] and 'FER' in tuple[0] and tuple[1]>95 and tuple[1]<105:
-        file.write(tuple[0]+'  '+str(round(tuple[1],1))+'\n')
+
+for tuple in result:
+    team_names = tuple[0]
+    cost = tuple[1]
+
+    # Filter below. Use it to remove unnecessary results. The example below removes every possible team that contains Stroll or Latifi, 
+    # and only keeps the teams that have Ferrari as constructor. It also only keeps the teams that cost between 95 and 105 mUSD.
+
+    if not 'Str' in team_names and not 'Lat' in team_names and 'FER' in team_names and cost>95 and cost<105:
+        file.write(team_names+'  '+str(round(cost,1))+'\n')
